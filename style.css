@@ -1,0 +1,253 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Georgia, serif;
+    background: #F5F0E8;
+    color: #1A1208;
+    min-height: 100vh;
+}
+
+/* SCREENS */
+.screen {
+    display: none;
+}
+
+.screen.active {
+    display: block;
+}
+
+/* HOME SCREEN */
+#homeScreen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 40px 24px;
+    text-align: center;
+}
+
+#homeScreen.active {
+    display: flex;
+}
+
+.logo {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #1A1208;
+    margin-bottom: 8px;
+    letter-spacing: -1px;
+}
+
+.subtitle {
+    font-size: 1.1rem;
+    color: #888070;
+    margin-bottom: 32px;
+    font-style: italic;
+}
+
+.input-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 420px;
+    background: white;
+    padding: 28px;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    border-top: 3px solid #C9922A;
+}
+
+input {
+    padding: 14px 16px;
+    border: 1.5px solid #ddd;
+    border-radius: 10px;
+    font-size: 1rem;
+    background: #FAF8F4;
+    outline: none;
+    font-family: Georgia, serif;
+}
+
+input:focus {
+    border-color: #C9922A;
+    box-shadow: 0 0 0 3px rgba(201,146,42,0.1);
+}
+
+button {
+    padding: 14px;
+    background: #1A1208;
+    color: #E8B84B;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: Georgia, serif;
+    letter-spacing: 0.5px;
+}
+
+button:hover {
+    background: #2d1f0a;
+}
+
+/* LOADING SCREEN */
+#loadingScreen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    text-align: center;
+    padding: 40px 24px;
+}
+
+#loadingScreen.active {
+    display: flex;
+}
+
+.loading-emoji {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1) rotate(-3deg); }
+    50% { transform: scale(1.1) rotate(3deg); }
+}
+
+.loading-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #1A1208;
+    margin-bottom: 8px;
+}
+
+.loading-title span {
+    color: #C9922A;
+    font-style: italic;
+}
+
+.loading-sub {
+    font-size: 0.9rem;
+    color: #888070;
+    margin-bottom: 32px;
+}
+
+.loading-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 300px;
+}
+
+.step {
+    padding: 10px 16px;
+    background: white;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    font-size: 0.85rem;
+    color: #888070;
+    text-align: left;
+    transition: all 0.3s;
+}
+
+.step.active {
+    border-color: #C9922A;
+    color: #1A1208;
+    background: rgba(201,146,42,0.05);
+    font-weight: bold;
+}
+
+.step.done {
+    border-color: #4a6741;
+    color: #4a6741;
+    background: rgba(74,103,65,0.05);
+}
+
+/* CHARACTERS SCREEN */
+.chars-header {
+    background: #1A1208;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.chars-header button {
+    background: transparent;
+    color: #E8B84B;
+    font-size: 0.85rem;
+    padding: 6px 14px;
+    border: 1px solid #E8B84B;
+    border-radius: 6px;
+    white-space: nowrap;
+}
+
+.chars-header h2 {
+    color: #E8B84B;
+    font-size: 1.4rem;
+    font-style: italic;
+}
+
+/* CARD GRID */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    padding: 20px;
+}
+
+/* CHARACTER CARD */
+.char-card {
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    border: 1px solid rgba(201,146,42,0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.char-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.12);
+}
+
+.char-card img {
+    width: 100%;
+    aspect-ratio: 3/4;
+    object-fit: cover;
+    display: block;
+}
+
+.char-card-body {
+    padding: 14px;
+    border-top: 2px solid #C9922A;
+}
+
+.char-card h3 {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #1A1208;
+    margin-bottom: 3px;
+}
+
+.char-card .title {
+    font-size: 0.75rem;
+    color: #C9922A;
+    font-style: italic;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.char-card .desc {
+    font-size: 0.78rem;
+    color: #888070;
+    line-height: 1.5;
+}

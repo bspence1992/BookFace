@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookFace</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- HOME SCREEN -->
+    <div id="homeScreen" class="screen active">
+        <h1 class="logo">BookFace</h1>
+        <p class="subtitle">What book are we reading?</p>
+        <div class="input-wrap">
+    <input type="text" id="bookInput" placeholder="Enter a book title..."/>
+    <input type="text" id="authorInput" placeholder="Author (optional)"/>
+    <button onclick="handleGenerate()">Generate Characters</button>
+</div>
+    </div>
+
+<!-- LOADING SCREEN -->
+<div id="loadingScreen" class="screen">
+    <div id="loadingContent">
+        <div class="loading-emoji">📖</div>
+        <h2 class="loading-title">Reading <span id="loadingBookName"></span>...</h2>
+        <p class="loading-sub">Gathering characters and generating portraits</p>
+        <div class="loading-steps">
+            <div class="step" id="step1">🔎 Identifying characters</div>
+            <div class="step" id="step2">✍️ Analyzing descriptions</div>
+            <div class="step" id="step3">🎨 Generating portraits</div>
+            <div class="step" id="step4">✦ Building your cards</div>
+        </div>
+    </div>
+</div>
+
+    <!-- CHARACTERS SCREEN -->
+    <div id="charsScreen" class="screen">
+        <div class="chars-header">
+            <button onclick="goBack()">← Back</button>
+            <h2 id="bookTitleDisplay">Book Title</h2>
+        </div>
+        <div id="cardGrid" class="card-grid"></div>
+    </div>
+
+    <script>
+    function showScreen(screenId) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(screenId).classList.add('active');
+    }
+
+    function handleGenerate() {
+    const bookTitle = document.getElementById('bookInput').value.trim();
+    if (!bookTitle) return;
+
+    document.getElementById('bookTitleDisplay').textContent = bookTitle;
+    document.getElementById('loadingBookName').textContent = bookTitle;
+    showScreen('loadingScreen');
+
+    // Animate loading steps
+    const steps = ['step1', 'step2', 'step3', 'step4'];
+    let i = 0;
+    const interval = setInterval(() => {
+        if (i > 0) {
+            document.getElementById(steps[i-1]).classList.remove('active');
+            document.getElementById(steps[i-1]).classList.add('done');
+        }
+        if (i < steps.length) {
+            document.getElementById(steps[i]).classList.add('active');
+            i++;
+        } else {
+            clearInterval(interval);
+        }
+    }, 1500);
+
+        const cardGrid = document.getElementById('cardGrid');
+cardGrid.innerHTML = '<p style="padding:20px;color:#888;">Finding characters...</p>';
+
+fetch('/api/characters', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ bookTitle, author: document.getElementById('authorInput').value.trim() })
+})
+.then(res => {
+    console.log('Response status:', res.status);
+    return res.json();
+})
+.then(characters => {
+    console.log('Characters received:', characters);
+    cardGrid.innerHTML = '';
+    if (!Array.isArray(characters)) {
+        cardGrid.innerHTML = '<p style="padding:20px;color:red;">Error loading characters.</p>';
+        return;
+    }
+    characters.forEach(c => {
+        const card = document.createElement('div');
+        card.className = 'char-card';
+        card.innerHTML = `
+    ${c.image ? `<img src="${c.image}" onerror="this.style.display='none'"/>` : ''}
+    <div class="char-card-body">
+        <h3>${c.name}</h3>
+        <div class="title">${c.title}</div>
+        <div class="desc">${c.description}</div>
+    </div>
+`;
+        cardGrid.appendChild(card);
+    });
+    showScreen('charsScreen');
+})
+.catch(err => {
+    cardGrid.innerHTML = '<p style="padding:20px;color:red;">Something went wrong. Try again!</p>';
+    console.error('Fetch error:', err);
+});
+    }
+
+    function goBack() {
+        showScreen('homeScreen');
+    }
+    </script>
+
+</body>
+</html>
